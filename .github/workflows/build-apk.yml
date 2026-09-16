@@ -12,10 +12,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Reconstruct Android project
+      - name: Reconstruct and verify Android project
         shell: bash
         run: |
-          cat project_chunks/project.b64.part* | tr -d '\n\r' | base64 -d > project.zip
+          cat \
+            project_chunks/project.b64.part00 \
+            project_chunks/project.b64.part01 \
+            project_chunks/project.b64.part02 \
+            project_fix2/r00 \
+            project_fix2/r01 \
+            project_fix2/r02 \
+            project_fix2/r03 \
+            project_fix2/r04 \
+            project_fix2/r05 \
+            project_fix2/r06 \
+            project_fix2/r07 \
+            project_chunks/project.b64.part05 \
+            | tr -d '\n\r' | base64 -d > project.zip
+          echo "8c57394ecccd88e3559666e65c62f8485b69c83c906341da2498e0a96ab554a4  project.zip" | sha256sum -c -
           unzip -q project.zip
           test -f RAS_Mission_Android_V3/app/build.gradle
 
